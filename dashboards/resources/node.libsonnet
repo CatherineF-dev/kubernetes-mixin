@@ -346,6 +346,28 @@ local timeSeries = g.panel.timeSeries;
             ],
           },
         ]),
+
+        tsPanel.new('Memory Compaction')
+        + tsPanel.standardOptions.withUnit('ops')
+        + tsPanel.queryOptions.withTargets([
+          prometheus.new(
+            '${datasource}',
+            queries.memoryCompactionStallRate($._config),
+          )
+          + prometheus.withLegendFormat('compact stall'),
+
+          prometheus.new(
+            '${datasource}',
+            queries.memoryCompactionFailRate($._config),
+          )
+          + prometheus.withLegendFormat('compact fail'),
+
+          prometheus.new(
+            '${datasource}',
+            queries.memoryCompactionSuccessRate($._config),
+          )
+          + prometheus.withLegendFormat('compact success'),
+        ]),
       ];
 
       g.dashboard.new('%(dashboardNamePrefix)sCompute Resources / Node (Pods)' % $._config.grafanaK8s)

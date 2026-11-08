@@ -142,6 +142,29 @@ local timeSeries = g.panel.timeSeries;
           )
           + prometheus.withLegendFormat('{{node}}'),
         ]),
+
+        // Direct memory compaction per node (stall, fail, success rates)
+        tsPanel.new('Memory Compaction per Node')
+        + tsPanel.standardOptions.withUnit('ops')
+        + tsPanel.queryOptions.withTargets([
+          prometheus.new(
+            '${datasource}',
+            queries.memoryCompactionStallRatePerNode($._config),
+          )
+          + prometheus.withLegendFormat('stall: {{node}}'),
+
+          prometheus.new(
+            '${datasource}',
+            queries.memoryCompactionFailRatePerNode($._config),
+          )
+          + prometheus.withLegendFormat('fail: {{node}}'),
+
+          prometheus.new(
+            '${datasource}',
+            queries.memoryCompactionSuccessRatePerNode($._config),
+          )
+          + prometheus.withLegendFormat('success: {{node}}'),
+        ]),
       ];
 
       g.dashboard.new('%(dashboardNamePrefix)sCompute Resources / Nodes Overview' % $._config.grafanaK8s)

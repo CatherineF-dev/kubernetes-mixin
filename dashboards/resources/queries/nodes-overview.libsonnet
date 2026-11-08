@@ -53,4 +53,13 @@
     /
     sum by (node) (kube_node_status_allocatable{%(clusterLabel)s="$cluster", %(kubeStateMetricsSelector)s, resource="memory"})
   ||| % config,
+
+  memoryCompactionStallRatePerNode(config)::
+    'sum by (node) (rate(node_vmstat_compact_stall{%(clusterLabel)s="$cluster", %(nodeExporterSelector)s}[%(grafanaIntervalVar)s]))' % config,
+
+  memoryCompactionFailRatePerNode(config)::
+    'sum by (node) (rate(node_vmstat_compact_fail{%(clusterLabel)s="$cluster", %(nodeExporterSelector)s}[%(grafanaIntervalVar)s]))' % config,
+
+  memoryCompactionSuccessRatePerNode(config)::
+    'sum by (node) (rate(node_vmstat_compact_success{%(clusterLabel)s="$cluster", %(nodeExporterSelector)s}[%(grafanaIntervalVar)s]))' % config,
 }
